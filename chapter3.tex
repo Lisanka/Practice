@@ -1,0 +1,475 @@
+\chapter{ПОСТАНОВКА ЗАДАЧИ В ОТСУТСТВИЕ МОДЕЛИ СИСТЕМЫ}\label{chap3}
+В данной главе сосредоточимся на задаче управления системой $G$, однако условимся, что реализация $(A,B,C,D)$ системы в пространстве состояний не известна. Классический подход в подобных ситуациях состоит в предварительной идентификации системы и последующей формулировке и решении задачи из главы \ref{chap2}.
+
+В настоящей работе будет предложен альтернативный подход, не нуждающийся в явном параметрическом представлении системы. Вместо модели $(A,B,C,D)$ будем использовать полученное в \cite{Berberich} представление любой траектории системы $G$ на основе одной предварительно сгенерированной траектории из управления и выходного сигнала
+$$
+    \{u^d, y^d\} = \{u^d(t), y^d(t)\}_{t = 0}^{T^d - 1},
+     $$
+которую далее будем называть априорной траекторией.
+
+
+Будем считать, что  априорная траектория $\{u^d, y^d\}$ измерена точно и для системы $G$ дана верхняя оценка размерности ее состояния $n$ (см. \cite{Berberich}).
+
+
+
+\section{Информативность априорной траектории}
+Предварительно приведем результаты работ \cite{Willems, Berberich}, в которых показано, как априорная траектория $\{u^d, y^d\}$ при определенных условиях может иметь ту же информационную ценность, что и модель системы $(A,B,C,D)$.
+
+\begin{definition}\label{persistency exciting}
+Пусть $L,L^d \in \mathbb{N}$, $L \leq L^d$. Управление $u = \{u(t)\}_{t=0}^{L^d-1}$ называется постоянно возбуждающим порядка $L$, если  матрица Ганкеля
+$$
+H_L(u) =
+\begin{pmatrix}
+  u(0) & u(1) & \cdots & u(L^d-L)\\
+  u(1) & u(2) & \cdots & u(L^d-L+1)\\
+  \vdots & \vdots & \ddots & \vdots \\
+  u(L-1) & u(L) & \cdots & u(L^d-1)
+\end{pmatrix}
+$$
+имеет полный строчный ранг, т.е. ${\rm rank}\, H_L(u) = mL$.
+\end{definition}
+
+\begin{remark}\label{remark on input length}
+Если управление $u$ является постоянно возбуждающим порядка $L$, то оно должно быть достаточно длинным. Поскольку матрица $H_L(u)\in \mathbb{R}^{mL \times (L^d - L + 1)}$ имеет полный строчный ранг, число строк не   превышает число столбцов: $L^d - L + 1 \geq mL$. Отсюда следует необходимое условие на длину $L^d$ постоянно возбуждающего управления порядка $L$: $L^d \geq L(m+1) - 1$.
+\end{remark}
+
+Согласно \cite{Willems, Berberich}, априорная траектория $\{u^d, y^d\}$, порожденная постоянно возбуждающим управлением достаточно высокого порядка, содержат информацию, достаточную для представления любой траектории системы $G$. Далее будем использовать следующий результат работы \cite{Willems}, сформулированный в \cite{Berberich} в терминах  классических моделей в пространстве состояний:
+\begin{theorem}\label{trajectory check}
+Пусть $\{u^d, y^d\} = \{u^d(t), y^d(t)\}_{t=0}^{T^d-1}$ --- априорная траектория линейной системы $G$ размерности $n$, причем $u^d$ --- постоянно возбуждающее управление порядка $T+n$. Тогда $\{u, y\} = \{u(t), y(t)\}_{t=0}^{T-1}$ является траекторией $G$ в том и только в том случае, когда для
+$$%\begin{equation}
+\begin{pmatrix}
+H_T(u^d) \\
+H_T(y^d)
+\end{pmatrix} \alpha = \begin{pmatrix}
+u \\
+y
+\end{pmatrix}
+$$%\end{equation}
+существует решение $\alpha \in \mathbb{R}^{T^d-T+1}.$
+\end{theorem}
+
+Теорема \ref{trajectory check} позволяет проверять любую пару $\{u,y\}$ на принадлежность множеству траекторий системы $G$.
+В дальнейшем будем использовать условия теоремы для построения множества возможных траекторий $\{u^p_\tau, u, y^p_\tau, y\}$ длины $T$ с некоторой фиксированной "прошлой"\ частью $\{u^p_\tau, y^p_\tau\} = \{u^p(t), y^p(t)\}_{t=0}^{\tau-1}$ длины $\tau$ и нефиксированной "будущей"\ частью  $\{u, y\} = \{u(t), y(t)\}_{t=\tau}^{T-1}$. Для этого будем делить на "прошлое"\ и "будущее"\ для момента $\tau$ и строки матриц Ганкеля для априорной траектории:
+$$
+H_T(u^d) = \begin{pmatrix}
+  u^d(0) & \cdots & u^d(T^d-T)\\
+  \vdots & \ddots & \vdots \\
+  u^d(\tau-1) & \cdots & u^d(\tau-1 + T^d - T) \\
+  \hline
+  u^d(\tau) & \cdots & u^d(\tau + T^d-T)\\
+  \vdots & \ddots & \vdots \\
+  u^d(T-1) & \cdots & u^d(T^d-1)
+\end{pmatrix} =
+		\begin{pmatrix}
+		U_{\tau}^p \\
+		U_{\tau}^f
+		\end{pmatrix},
+    $$
+$$
+H_T(y^d) = \begin{pmatrix}
+  y^d(0) & \cdots & y^d(T^d-T)\\
+  \vdots & \ddots & \vdots \\
+  y^d(\tau-1) & \cdots & y^d(\tau-1 + T^d - T) \\
+  \hline
+  y^d(\tau) & \cdots & y^d(\tau + T^d-T)\\
+  \vdots & \ddots & \vdots \\
+  y^d(T-1) & \cdots & y^d(T^d-1)
+\end{pmatrix} =
+		\begin{pmatrix}
+		Y_{\tau}^p \\
+		Y_{\tau}^f
+		\end{pmatrix}.
+    $$
+
+Если управление $u^d$ является постоянно возбуждающим порядка $T+n$, то, согласно теореме \ref{trajectory check}, $\{u_{\tau}^p, u, y_{\tau}^p, y\}$ является траекторией системы $G$ тогда и только тогда, когда уравнение
+\begin{equation}\label{traj-cond}
+\begin{pmatrix}
+U_{\tau}^p \\
+Y_{\tau}^p \\
+U_{\tau}^f \\
+Y_{\tau}^f
+\end{pmatrix} \alpha(\tau) = \begin{pmatrix}
+u_{\tau}^p \\
+y_{\tau}^p \\
+u \\
+y
+\end{pmatrix}
+\end{equation}
+имеет решение $\alpha(\tau)\in \mathbb{R}^{T^d - T +1}$.
+
+В силу теоремы \ref{trajectory check}, для любых $u^p_\tau, y^p_\tau, u$ можно найти хотя бы один возможный выходной сигнал $y$, но для единственности $y$, которая представляет особый практический интерес, необходимо наложить дополнительные условия. При условии наблюдаемости пары $(A,C)$, траектория $\{u^p, y^p\}$ длины $n$ однозначно определяет начальное состояние, поэтому для обеспечения единственности достаточно потребовать $\tau \geq n$.
+
+
+\section{Принцип разделимости}
+Найдем аналог принципа разделимости управления и наблюдения для линейных систем с известной моделью в пространстве состояний для случая, когда траектория системы $G$ представлена в виде (\ref{traj-cond}). Будем следовать идее декомпозиции будущего выходного сигнала $y$ из главы \ref{chap2}
+\begin{equation}\label{DBOC-y-separation}
+    y =  y_0 + \hat y,
+    \end{equation}
+где $y_0 = \{y_0(t)\}_{t=\tau}^{T-1}$ --- выходной сигнал системы $G$, соответствующий управлению $u$ и тривиальному начальному условию $x(\tau) = 0$; $\hat y = \{\hat y(t)\}_{t=\tau}^{T-1}$ --- выходной сигнал неуправляемой системы $G$ для некоторого начального условия $x(\tau)$, согласующегося с текущей позицией процесса $\{u_\tau^p, \tilde y_\tau^p\}$.
+
+%Рассмотрим подробно слагаемые в (\ref{DBOC-y-separation}). При определении $y_0$ тривиальное начальное состояние  $x(\tau)=0$ можно зафиксировать неявно посредством тривиальной прошлой траектории $\{0,0\}$ длины не менее $n$. С тривиальной траекторией, очевидно, согласуется начальное условие $x(0)=0$, а поскольку $\tau \geq n$, это единственно возможное начальное состояние. Тогда система остается в начале координат вплоть до момента $\tau$: $x(t)=0$, $t=0, \ldots, \tau$. Из рассуждений следует, что $\{0, u, 0, y_0\}$ является траекторией длины $T$ системы $G$.
+%
+%
+%
+%Далее $\{0,\hat y\}$ --- траектория системы $G$ c начальным условием  $x(\tau)$ из множества состояний, в которые система могла прийти, точно следуя траектории $\{u_\tau^p, y_\tau^p\}$, где о выходном сигнале $y_\tau^p$ известно только, что он отклоняется от измеренного $\tilde y_\tau^p$ в равномерной норме не более чем на $\varepsilon$. Тогда $\{u_{\tau}^p, 0, y_{\tau}^p, \hat{y}\}$ --- траектория длины $T$ системы $G$.
+%
+%Из необходимого условия теоремы \ref{trajectory check} следует, что для траекторий $\{0, u, 0, y_0\}$ и $\{u_{\tau}^p, 0, y_{\tau}^p, \hat{y}\}$ существуют $ \alpha_0(\tau), \hat \alpha(\tau)$, соответственно, удовлетворяющие
+%\begin{equation}\label{two traj}
+%\begin{pmatrix}
+%U_{\tau}^p \\
+%Y_{\tau}^p \\
+%U_{\tau}^f \\
+%Y_{\tau}^f
+%\end{pmatrix} \alpha_0(\tau) = \begin{pmatrix}
+%0 \\
+%0 \\
+%u \\
+%y_0
+%\end{pmatrix},
+% \quad
+% \begin{pmatrix}
+%U_{\tau}^p \\
+%Y_{\tau}^p \\
+%U_{\tau}^f \\
+%Y_{\tau}^f
+%\end{pmatrix} \hat{\alpha}(\tau) = \begin{pmatrix}
+%u_{\tau}^p \\
+%y_{\tau}^p \\
+%0 \\
+%\hat{y}
+%\end{pmatrix}.
+%\end{equation}
+%Суммируя  равенства  (\ref{two traj}), получаем
+%\begin{equation}\label{one traj}
+%\begin{pmatrix}
+%U_{\tau}^p \\
+%Y_{\tau}^p \\
+%U_{\tau}^f \\
+%Y_{\tau}^f
+%\end{pmatrix} (\hat{\alpha}(\tau) + \alpha_0(\tau)) = \begin{pmatrix}
+%u_{\tau}^p \\
+%y_{\tau}^p \\
+%u \\
+%\hat{y} + y_0
+%\end{pmatrix}.
+%\end{equation}
+%В силу теоремы \ref{trajectory check}, условие (\ref{one traj}) является достаточным для того, чтобы ${\{u_{\tau}^p, u, y_{\tau}^p, \hat{y} + y_0\}}$ являлась траекторией системы. Поскольку начальное состояние $x_0$ неявно зафиксировано достаточно длинным участком $\{u_{\tau}^p, y_{\tau}^p\}$, эта траектория совпадает с искомой $\{u_{\tau}^p, u, y_{\tau}^p, y\}$, т.е. $y = \hat{y} + y_0$. Суммируя рассуждения выше, любую траекторию можно строить согласно лемме:
+Эта идея, а также теорема \ref{trajectory check}, используются при доказательстве следующего результата:
+\begin{lemma}\label{dd-separation}
+Пусть $\{u_{\tau}^p, y_{\tau}^p \}$ --- некоторая фиксированная прошлая траектория системы $G$ длины $\tau \geq n$. Тогда любая траектория $\{u_{\tau}^p, u, y_{\tau}^p, y\}$ длины $T$ системы $G$ однозначно представима в виде суммы траекторий $\{0, u, 0, y_0\}$ и $\{u_{\tau}^p, 0, y_{\tau}^p, \hat{y}\}$ длины $T$, причем для фиксированного управления $u$ определить неизвестные будущие участки $y_0, \hat{y}$ можно следующим образом:\\
+1. Найти некоторые решения $\hat{\alpha}(\tau)$, $\alpha_0(\tau)$ алгебраичеких уравнений
+\begin{equation}\label{cond-lemma}
+\begin{pmatrix}
+U_\tau^p \\
+Y_\tau^p \\
+U_\tau^f \\
+\end{pmatrix} \hat{\alpha}(\tau) = \begin{pmatrix}
+u_\tau^p \\
+y_\tau^p \\
+0 \\
+\end{pmatrix}, \quad
+\begin{pmatrix}
+U_\tau^p \\
+Y_\tau^p \\
+U_\tau^f \\
+\end{pmatrix} \alpha_0(\tau) = \begin{pmatrix}
+0 \\
+0 \\
+u \\
+\end{pmatrix}.
+\end{equation}
+2. Вычислить $\hat{y} = Y_\tau^f\hat{\alpha}(\tau)$, $y_0 = Y_\tau^f\alpha_0(\tau)$.
+\end{lemma}
+
+%\begin{remark}\label{y(t)-from-y}
+%Для получения $\hat y(t), y_0(t)$ в конкретный момент времени $t$, на шаге 2 необходимо использовать блок $Y^d(t)$ матрицы $Y_\tau^f$ (или $H_T(y^d)$):
+%$$
+%     Y^d(t) = (y^d(t), y^d(t+1), \ldots, y^d(t+T^d-T)).
+%     $$
+%Получим $\hat y(t) = Y^d(t)\hat \alpha(\tau)$, $y_0(t) = Y^d(t) \alpha_0(\tau)$.
+%\end{remark}
+
+
+%По аналогии с определением~\ref{def:4-1} дадим
+%\begin{definition} Назовем параметр $\hat\alpha(\tau)$ согласующимся с позицией $\{u^p_\tau, \tilde y_\tau^p\}$ если
+%\begin{equation*}\label{DBOC-hat-alpha}
+%    \begin{pmatrix}
+%        U_\tau^p \\
+%        Y_\tau^p \\
+%        U_\tau^f \\
+%        \end{pmatrix} \hat{\alpha}(\tau) = \begin{pmatrix}
+%        u_\tau^p \\
+%        y_\tau^p \\
+%        0 \\
+%        \end{pmatrix}, \ \
+%    ||y^p(t) - \tilde y^p(t)||_{\infty} \le \varepsilon, \ \
+%     t = 0, \ldots, \tau-1.
+%\end{equation*}
+%\end{definition}
+
+%Пусть ${\cal A}(\tau, u_\tau^p, \tilde y_{\tau}^p)$ --- множество всех $\hat \alpha(\tau)$, согласующихся с  $\{u^p_\tau, \tilde y^p_\tau\}$:
+%\begin{align*}
+%    {\cal A}(\tau, u_\tau^p, \tilde y^p_\tau) = \bigg\{ \hat \alpha(\tau)\in \mathbb{R}^{T^d-T+1} : & \ \  U_\tau^p\hat{\alpha}(\tau) = u^p_\tau,  \ \ U^f_\tau\hat{\alpha}(\tau) = 0, &\\
+%    & -\varepsilon \mathbbm{1} \le Y^p_\tau\hat{\alpha}(\tau) -\tilde y^p_\tau \le  \varepsilon\mathbbm{1}\bigg\}, &
+%    \end{align*}
+%где $\mathbbm{1}$ --- $m(T-\tau)$-вектор из единиц.
+%Множество ${\cal A}(\tau, u_\tau^p, \tilde y^p_\tau)$ --- аналог множества $X(\tau, u_\tau^p, \tilde y^p_\tau)$ состояний $x(\tau)$, согласующихся с текущей позицией $\{u_\tau^p, \tilde y^p_\tau\}$.
+
+
+
+%Далее определим ${\cal Y}(t| \tau, u_\tau^p, \tilde y^p_\tau)$ как множество всех $\hat y(t)$, согласующихся с позицией $\{u^p_\tau, \tilde y^p_\tau\}$. В соответствии с замечанием \ref{y(t)-from-y}, это множество порождается множеством ${\cal A}(\tau, u_\tau^p, \tilde y_{\tau}^p)$:
+%$$
+%    {\cal Y}(t | \tau, u_\tau^p, \tilde y^p_\tau) = \bigg\{ \hat y(t) = Y^d(t) \hat \alpha(\tau) :  \  \hat \alpha(\tau) \in {\cal A}(\tau, u_\tau^p, \tilde y^p_\tau)\bigg\}.
+%    $$
+
+В связи с  декомпозицией (\ref{DBOC-y-separation}) выходного сигнала, ограничение (\ref{constraints}) в момент $t$ принимает вид
+$G(t)(y_0(t)+\hat y(t)) \leq g(t)$. Тогда  на $y_0(t)$ наложим "суженное"{} условие:
+\begin{equation}\label{tightened constraint}
+G(t)y_0(t) \leq g(t)-\chi(t|\tau),
+\end{equation}
+где  $\chi(t|\tau) = (\chi_i(t|\tau), i = 1,\ldots, q)$ соответствует наихудшей реализации выходного сигнала $\hat y(t)$ в позиции $\{u_\tau^p, \tilde y^p_\tau\}$, а именно, каждый его элемент $\chi_i(t|\tau)$ является решением задачи
+\begin{equation} \label{estimation-set-description}
+    \chi_i(t|\tau) = \max\limits_{\hat{y}(t)} \ G_i(t)\hat{y}(t), \ \
+    \hat{y}(t) \in {\cal Y}(t| \tau, u_\tau^p, \tilde y_{\tau}^p),
+\end{equation}
+где $G_i(t)$ --- $i$-ая строка матрицы $G(t).$
+
+Задачи (\ref{estimation-set-description}) представляют собой  задачи линейного программирования:
+\begin{align} \label{estimation-lp}
+    \chi_i(t|\tau) =  & \max\limits_{\hat\alpha(\tau)} \ G_i(t)Y^d(t)\hat{\alpha}(\tau), \\
+    & \begin{pmatrix}
+        U_\tau^p \\
+        U_\tau^f \\
+        \end{pmatrix} \hat{\alpha}(\tau) = \begin{pmatrix}
+        u_\tau^p \\
+        0 \\
+        \end{pmatrix}, \nonumber \\
+    & \tilde{y}_{\tau}^p-\varepsilon \mathbbm{1} \leq Y_\tau^p \hat{\alpha}(\tau) \leq \tilde{y}_\tau^p + \varepsilon \mathbbm{1}. \nonumber
+    \end{align}
+Задачи (\ref{estimation-lp}) --- \textit{задачи оптимального наблюдения}, см. \cite{Dmitruk2004} и главу \ref{chap2}.
+
+
+Выполнение  для $y_0(t)$  ограничения (\ref{tightened constraint}) очевидно влечет удовлетворение исходного ограничения (\ref{constraints}) на $y(t)$ для любой возможной реализации $\hat{y}(t)$,  согласующейся с позицией $\{u^p_\tau, \tilde y^p_\tau\}$.
+
+Параметр $\alpha_0(\tau)$, удовлетворяющий второму из условий (\ref{cond-lemma}) и такой, что для $y_0(t) = Y^d(t)\alpha_0(\tau)$ при всех $t = \tau, \ldots, T-1$ выполняется неравенство (\ref{tightened constraint}), определяет допустимое управление $u = U_\tau^f \alpha_0(\tau)$. Тогда \textit{ задача  оптимального управления} в момент времени $\tau$ имеет вид:
+%\begin{align}\label{control}
+%\min\limits_{\alpha_0(\tau), u} \ & \norm{u}^2, \\
+%    & \begin{pmatrix}
+%    U_\tau^p \\
+%    Y_\tau^p \\
+%    U_\tau^f \\
+%    \end{pmatrix} \alpha_0(\tau) = \begin{pmatrix}
+%    0 \\
+%    0 \\
+%    u \\
+%    \end{pmatrix},\nonumber \\
+%    & G(t)Y^d(t)\alpha_0(\tau) \leq g(t) - \chi(t|\tau), \nonumber \\
+%    & u_{\min} \leq u(t) \leq u_{\max},  \ \ t = \tau, \ldots, T-1.\nonumber
+%    \end{align}
+
+
+
+%Исключая в (\ref{control}) управление $u$, получаем задачу квадратичного программирования относительно $\alpha_0(\tau)$:
+\begin{align}\label{control-qp}
+    \min\limits_{\alpha_0(\tau)} \ & \alpha_0(\tau)^T(U_{\tau}^f)^TU_{\tau}^f\alpha_0(\tau), \\
+    & \begin{pmatrix}
+        U_\tau^p \\
+        Y_\tau^p \\
+    \end{pmatrix} \alpha_0(\tau) = \begin{pmatrix}
+    0 \\
+    0 \\
+    \end{pmatrix},\nonumber \\
+    & G(t)Y^d(t)\alpha_0(\tau) \leq g(t)- \chi(t|\tau), \nonumber\\
+    & u_{\min} \leq U^d(t)\alpha_0(\tau) \leq u_{\max}, \ \
+        t = \tau, \ldots, T-1, \nonumber
+\end{align}
+где, по аналогии с $Y^d(t)$,  $U^d(t) = (u^d(t), u^d(t+1), \ldots, u^d(t+T^d-T))$.
+
+
+Пусть  $\alpha_0^*(\tau, u_\tau^p, \tilde{y}_\tau^p)$ --- решение задачи  оптимального управления (\ref{control-qp}). На вход системы $G$ подаем первое значение соответствующего управления, которое вычисляется согласно формуле $u^*(\tau|\tau, u_\tau^p, \tilde{y}_\tau^p) = U^d(\tau)\alpha_0^*(\tau, u_\tau^p, \tilde{y}_\tau^p)$.
+
+
+
+Таким образом, алгоритм управления системой на основе априорных данных $\{u^d, y^d\}$ состоит в следующем
+
+\noindent при всех $\tau = n,\ldots, T-1$:
+
+1) решить задачи (\ref{estimation-lp}), найти оценки $\chi_i(t|\tau)$, $i = 1, \ldots, q$, $t = \tau, \ldots, T-1$;
+
+2) решить задачу (\ref{control-qp}), найти  $\alpha_0^*(\tau, u_\tau^p, \tilde{y}_\tau^p)$;
+
+3) подать на вход системы управление $u^p(\tau) = U^d(\tau)\alpha_0^*(\tau, u_\tau^p, \tilde{y}_\tau^p)$.
+
+Как и в главе~\ref{chap2}, полученное в результате применения алгоритма управление $u^p(\tau)$, $\tau = n, \ldots, T-1$, является \textit{реализацией в конкретном процессе управления оптимальной обратной связи по неточным измерениям}.
+
+
+Для того, чтобы результаты представленного алгоритма совпадали с результатом главы \ref{chap2} необходимо потребовать  $X_0 = \mathbb{R}^n$, совпадения управлений $u^p(t)$ при $t = 0,1,\ldots, n-1$,  и также начинать процесс управления в момент $\tau = n$.
+
+Теоретическое обоснование реализуемости предложенного алгоритма управления дает следующий результат.
+\begin{theorem}\label{main-theorem}
+Пусть в момент $\tau$ для позиции $\{u^p_\tau, \tilde y^p_\tau\}$ каждая из задач (\ref{estimation-lp}) имеет решение. Далее, пусть имеет решение задача (\ref{control-qp}) с параметрами $\chi(t|\tau)$, поставленными решениями задач (\ref{estimation-lp}). Тогда в момент $\tau+1$ для позиции $\{u^p_\tau, u^*(\tau|\tau), \tilde y^p_\tau, \tilde y^p(\tau)\}$
+задачи (\ref{estimation-lp}), (\ref{control-qp})   также имеют решение. Более того, $$
+    \sum\limits_{t=\tau+1}^{T-1}\norm{u^*(t|\tau+1)}^2 \leq \sum\limits_{t=\tau+1}^{T-1}\norm{u^*(t|\tau)}^2.
+    $$
+\end{theorem}
+
+%\begin{proof} Сначала докажем разрешимость каждой из задач оптимального наблюдения в момент $\tau+1$. Эти задачи можно записать в виде
+%\begin{align}\label{estimation-lp-tau+1}
+%    \chi_i(t|\tau+1) = & \max\limits_{\hat{\alpha}(\tau+1)} G_i(t)Y^d(t)\hat{\alpha}(\tau+1), \\
+%    & \begin{pmatrix}
+%        U_{\tau}^p \\
+%        U^d(\tau)\\
+%        U_{\tau+1}^f
+%    \end{pmatrix} \hat{\alpha}(\tau+1) =
+%    \begin{pmatrix}
+%        u_{\tau}^p \\
+%        u^*(\tau|\tau)\\
+%        0
+%    \end{pmatrix}, \nonumber \\
+%    & \tilde{y}_{\tau}^p-\varepsilon \mathbbm{1} \leq
+%    Y_{\tau}^p \hat\alpha(\tau+1) \leq
+%    \tilde{y}_{\tau}^p + \varepsilon \mathbbm{1}, \nonumber \\
+%    & \tilde y^p(\tau) - \varepsilon \mathbbm{1} \leq
+%    Y^d(\tau) \hat \alpha(\tau+1) \leq
+%    \tilde y^p(\tau) + \varepsilon \mathbbm{1}, \nonumber
+%\end{align}
+%а задачи наблюдения для момента $\tau$ представимы в виде
+%\begin{align}\label{estimation-lp-tau}
+%    \chi_i(t|\tau) = & \max\limits_{\hat{\alpha}(\tau)} G_i(t)Y^d(t)\hat{\alpha}(\tau), \\
+%    & \begin{pmatrix}
+%        U_{\tau}^p \\
+%        U^d(\tau)\\
+%        U_{\tau+1}^f \\
+%    \end{pmatrix} \hat{\alpha}(\tau) =
+%    \begin{pmatrix}
+%        u_{\tau}^p \\
+%        0\\
+%        0 \\
+%    \end{pmatrix}, \nonumber \\
+%    & \tilde{y}_{\tau}^p-\varepsilon \mathbbm{1} \leq
+%    Y_{\tau}^p \hat\alpha(\tau) \leq
+%    \tilde{y}_\tau^p + \varepsilon \mathbbm{1}.\nonumber
+%\end{align}
+%
+%Каждая задача (\ref{estimation-lp-tau+1}) допустима, поскольку для истинной реализовавшейся траектории $\{u^p_\tau, u^*(\tau|\tau), y^p_\tau, y^p(\tau)\}$ и будущего тривиального управления $\{u(t)\}_{t=\tau+1}^T = 0$ существует $\hat\alpha^p(\tau+1)$, для которого выполняется второе из условий (\ref{cond-lemma}) Леммы \ref{dd-separation}, а значит, для этого $\hat\alpha^p(\tau+1)$ удовлетворены все ограничения (\ref{estimation-lp-tau+1}).
+%
+%Для доказательства разрешимости задачи (\ref{estimation-lp-tau+1})
+%используем решение $\alpha_0^*(\tau)$  задачи оптимального управления (\ref{control-qp}) в момент $\tau$.
+%Обозначим
+%\begin{equation}\label{uc}
+%    u^c = U^f_{\tau+1}\alpha_0^*(\tau),\ \
+%    y_0^*(\tau|\tau) = Y^d(\tau)\alpha_0^*(\tau).
+%    \end{equation}
+%Заметим, что $u^c = \{u^*(t|\tau)\}_{t = \tau+1}^{T-1}$, т.е. это "хвост"{} оптимального управления задачи (\ref{control-qp}). Согласно Лемме \ref{dd-separation} существует $\alpha^c$, такое что выполняется равенство
+%\begin{equation}\label{alpha_0-candidate}
+%\begin{pmatrix}
+%U_{\tau}^p \\
+%U^d(\tau)\\
+%Y_{\tau}^p \\
+%Y^d(\tau)\\
+%U_{\tau+1}^f \\
+%\end{pmatrix} \alpha^c = \begin{pmatrix}
+%0\\
+%0\\
+%0\\
+%0\\
+%u^c\\
+%\end{pmatrix}.
+%\end{equation}
+%
+%Сдвинем переменную ${\hat \alpha(\tau+1)}$, относительно которой поставлены задачи оптимального наблюдения (\ref{estimation-lp-tau+1}), на константу, перейдем к новой переменной $\Delta\alpha(\tau+1)$:
+%$$
+%    \hat \alpha(\tau+1) = \alpha_0^*(\tau)-\alpha^c+\Delta\alpha(\tau+1).
+%    $$
+%Тогда
+%$$
+%    \chi_i(t|\tau+1) = G_i(t)Y^d(t)(\alpha_0^*(\tau)-\alpha^c) +
+%    \Delta \chi_i(t|\tau+1),
+%    $$
+%где, с учетом (\ref{uc}), (\ref{alpha_0-candidate}),
+%\begin{align}
+%    \Delta\chi_i(t|\tau+1) = & \max_{\Delta\alpha(\tau+1)} G_i(t)Y^d(t)\Delta\alpha(\tau+1),
+%    \label{estimation-delta-alpha} \\
+%    & \begin{pmatrix}
+%        U_\tau^p \\
+%        U^d(\tau)\\
+%        U_\tau^f \\
+%    \end{pmatrix} \Delta\alpha(\tau+1) =
+%    \begin{pmatrix}
+%        u_\tau^p \\
+%        0 \\
+%        0\\
+%    \end{pmatrix},
+%    \label{u-delta-alpha}
+%    \nonumber \\
+%    & \tilde{y}_{\tau}^p-\varepsilon \mathbbm{1}  \leq
+%    Y_\tau^p \Delta \alpha(\tau+1)
+%    \leq \tilde{y}_\tau^p + \varepsilon \mathbbm{1}, %\label{y-delta-alpha}
+%    \nonumber\\
+%    & \tilde y^p(\tau)-y_0^*(\tau|\tau) - \varepsilon \mathbbm{1} \leq Y^d(\tau) \Delta \alpha(\tau+1)
+%    \leq \tilde y^p(\tau)-y_0^*(\tau|\tau) +  \varepsilon \mathbbm{1},
+%    \label{estimation-new-constraint}
+%\end{align}
+%и множество допустимых решений $\Delta \alpha(\tau+1)$ непустое.
+%
+%
+%Сравним задачи (\ref{estimation-delta-alpha}) -- (\ref{estimation-new-constraint}) для $\Delta \alpha(\tau + 1)$ и (\ref{estimation-lp-tau}) для $\hat \alpha (\tau)$. Очевидно, что  дополнительное ограничение (\ref{estimation-new-constraint}) влечет $\Delta\chi_i(t|\tau+1) \le \chi_i(t|\tau)$ и справедлива оценка
+%\begin{equation}\label{chi-bound}
+%    \chi_i(t|\tau+1) \le G_i(t)Y^d(t)(\alpha_0^*(\tau)-\alpha^c) +
+%    \chi_i(t|\tau),
+%\end{equation}
+%для всех $i = 1, \ldots, q$, $t = \tau+1, \ldots, T-1$.
+%
+%Таким образом, доказано, что в момент $\tau+1$ все задачи оптимального наблюдения имеют решение.
+%
+%
+%Остается продемонстрировать, что множество допустимых решений $\alpha_0(\tau+1)$ в задаче оптимального управления для момента $\tau+1$, которая имеет вид
+%\begin{align}
+%    \min\limits_{\alpha_0(\tau+1)} \ & \alpha_0(\tau+1)^T(U_{\tau+1}^f)^T U_{\tau+1}^f\alpha_0(\tau+1), %\label{control-qp-tau+1}
+%    \nonumber \\
+%    & \begin{pmatrix}
+%        U_{\tau}^p \\
+%        U^d(\tau)\\
+%        Y_{\tau}^p \\
+%        Y^d(\tau) \\
+%    \end{pmatrix} \alpha_0(\tau+1) = \begin{pmatrix}
+%        0 \\
+%        0\\
+%        0\\
+%        0 \\
+%    \end{pmatrix},  \label{tau+1-eq}\\
+%    & G(t)Y^d(t)\alpha_0(\tau+1) \leq g(t) - \chi(t|\tau+1),  \label{tau+1-constr-y}\\
+%    & u_{\min} \leq U^d(t)\alpha_0(\tau+1) \leq u_{\max},\ \
+%    t = \tau+1, \ldots, T-1, \label{tau+1-constr-u}
+%\end{align}
+%непусто --- тогда эта выпуклая задача квадратичного программирования имеет решение.
+%
+%Покажем, что $\alpha^c$ --- допустимое решение. По построению $\alpha^c$ выполнены ограничения-равенства (\ref{tau+1-eq}) и группа ограничений на управления (\ref{tau+1-constr-u}). Покажем, что выполнены также условия (\ref{tau+1-constr-y}). Воспользовавшись сначала (\ref{chi-bound}), а затем тем фактом, что $\alpha_0^*(\tau)$ удовлетворяет ограничениям задачи (\ref{control-qp}), получаем
+%\begin{align*}
+%    G(t) Y^d(t) \alpha^c + \chi(t|\tau+1) & \leq G(t) Y^d(t) \alpha^c +  G(t)Y^d(t)(\alpha_0^*(\tau)-\alpha^c) + \chi(t|\tau) = \\
+%    & = G(t) Y^d(t)\alpha_0^*(\tau) + \chi(t|\tau) \leq g(t), \ \
+%    t = \tau+1, \ldots, T-1,
+%\end{align*}
+%что доказывает (\ref{tau+1-constr-y}).
+%
+%
+%Наконец, поскольку решение $\alpha^c$ допустимо, оптимальное решение удовлетворяет
+%\begin{equation*}
+%    \sum\limits_{t=\tau+1}^{T-1}\norm{u^*(t|\tau+1)}^2 \leq (\alpha^c)^T (U_{\tau+1}^f)^T U_{\tau+1}^f \alpha^c
+%    = \sum\limits_{t=\tau+1}^{T-1}\norm{u^*(t|\tau)}^2,
+%\end{equation*} что завершает доказательство всех утверждений теоремы.
+%$\Box$
+%\end{proof}
+
+\begin{corollary}
+Если задачи оптимального наблюдения (\ref{estimation-lp}) и управления (\ref{control-qp}) имеют решение в момент времени $\tau=n$, то они разрешимы и в каждый из последующих моментов $\tau = n+1, \ldots, T-1$. При этом критерий качества, значение которого определяется в момент $\tau$ как
+$$
+    J(\tau) = \sum\limits_{t=0}^{\tau-1}\norm{u^p(t)}^2 + \sum\limits_{t=\tau}^{T-1}\norm{u^*(t|\tau)}^2,
+    $$
+является невозрастающей функцией от $\tau$.
+\end{corollary}
+
+Доказательство теоремы~\ref{main-theorem}  использует "хвост"\ $u^c = \{u^*(t|\tau)\}_{t = \tau+1}^{T-1}$  оптимального управления, полученного в момент $\tau$ не только для доказательства допустимости задачи оптимального управления (как и в случае наличия модели системы), но и для доказательства существования решения задач оптимального наблюдения. Это позволяет учесть взаимосвязь не только между соответствующими задачами для $\tau$ и $\tau+1$, но и между самими задачами для момента $\tau+1$. В частности,  для задач оптимального наблюдения на основе $u^c$ приводится такая верхняя оценка решения $\chi(t|\tau+1)$, которая позволяет продемонстрировать и допустимость управления $\{u^*(t|\tau)\}_{t = \tau+1}^{T-1}$ в задаче оптимального управления для момента $\tau+1$.
+
+\bigskip
+В данной главе был предложен новый способ решения задачи, поставленной в предыдущей главе. Этот способ не требует знания реализации системы в пространстве состояний. Предложенный метод сводится к решению задач линейного и квадратичного программирования, базирующихся лишь на двух траекториях системы: априорной и наблюдаемой в процессе управления.
